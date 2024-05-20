@@ -1,47 +1,59 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+  import { reactive } from 'vue';
+
+ 
+  const state = reactive({
+    firstField: 0,
+    secondField: 0,
+    operation: '+',
+    result: 0
+  })
+
+  function calcular() {
+    const { firstField, secondField, operation } = state
+    
+    if(operation == '+')
+      state.result = parseFloat(firstField) + parseFloat(secondField)
+    else if(operation == '-')
+      state.result = parseFloat(firstField) - parseFloat(secondField) 
+    else if(operation == '/')
+      state.result = parseFloat(firstField) / parseFloat(secondField) 
+    else if(operation == '*')
+      state.result = parseFloat(firstField) * parseFloat(secondField)
+    else
+      alert('Escolha uma operação válida!')
+  }
+
+  function onChangingFirstField(value) {
+    if(value)
+      state.firstField = value;
+    calcular();
+  }
+  function onChangingSecondField(value) {
+    if(value)
+      state.secondField = value;
+    calcular();
+  }
+  function onChangingOperation(value) {
+    if(value)
+      state.operation = value;
+    calcular();
+  }
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <input type="number" @keyup="e => onChangingFirstField(e.target.value)"> <br />
+  <select @change="e => onChangingOperation(e.target.value)">
+    <option value="+">+</option>
+    <option>-</option>
+    <option>/</option>
+    <option value="*">x</option>
+  </select> <br />
+  <input type="number" @keyup="e => onChangingSecondField(e.target.value)"> <br />
+  resultado: {{ state.result }}
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
